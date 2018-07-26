@@ -37,7 +37,10 @@
     "redux-logger": "^3.0.6",
     "sass": "^1.10.1",
     "sass-loader": "^7.0.3",
-    "style-loader": "^0.21.0"
+    "style-loader": "^0.21.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "pretty-quick": "^1.4.1"
   },
   "repository": {
     "type": "git",

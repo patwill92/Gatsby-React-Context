@@ -1,9 +1,14 @@
-// import axios from 'axios'
+import React from "react";
+import { Provider } from "react-redux";
+import { renderToString } from "react-dom/server";
 
-// const dale = async () =>
-//   await axios.get('https://jsonplaceholder.typicode.com/posts/1')
+import createStore from "./src/store";
 
-// exports.onRenderBody = async ({ setBodyProps }) => {
-//   const res = await dale()
-//   setBodyProps({ dale: res })
-// }
+export const replaceRenderer = ({ bodyComponent, replaceBodyHTMLString }) => {
+  const store = createStore();
+
+  const ConnectedBody = () => (
+    <Provider store={store}>{bodyComponent}</Provider>
+  );
+  replaceBodyHTMLString(renderToString(<ConnectedBody />));
+};

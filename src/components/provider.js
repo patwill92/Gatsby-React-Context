@@ -1,26 +1,47 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-const MyContext = React.createContext()
+import { hydrate } from "../store";
 
-const { Provider } = MyContext
+const MyContext = React.createContext();
 
-export default class MyProvider extends Component {
+const { Provider } = MyContext;
+
+class MyProvider extends Component {
   state = {
     ...this.props.data,
-  }
+    ...this.props.reduxContext
+  };
 
   changeTitle = () => {
-    this.setState({title: 'De una papa'})
-  }
-  
+    this.setState({ title: "De una papa" });
+  };
+
+  componentDidMount = async () => {
+    await this.props.hydrate({ ...this.state, redux: true });
+    console.log(this.props);
+  };
+
   render() {
-    return <Provider value={{
-      state: this.state,
-      funcs: {
-        changeTitle: this.changeTitle
-      }
-    }}>{this.props.children}</Provider>
+    const redux = this.props.reduxContext.redux;
+    return (
+      <Provider
+        value={{
+          state: !redux ? this.state : this.props.reduxContext,
+          funcs: {
+            changeTitle: this.changeTitle
+          }
+        }}
+      >
+        {this.props.children}
+      </Provider>
+    );
   }
 }
 
-export const Consumer = MyContext.Consumer
+export default connect(
+  ({ reduxState }) => ({ reduxContext: reduxState }),
+  { hydrate }
+)(MyProvider);
+
+export const Consumer = MyContext.Consumer;

@@ -1,16 +1,16 @@
-const axios = require('axios')
-const crypto = require('crypto')
+const axios = require("axios");
+const crypto = require("crypto");
 
 exports.onCreateNode = async ({ actions, createNodeId }) => {
-  const { createNode } = actions
+  const { createNode } = actions;
 
   const processNode = data => {
-    const nodeId = createNodeId(`my-node`)
-    const nodeContent = JSON.stringify(data)
+    const nodeId = createNodeId(`my-node`);
+    const nodeContent = JSON.stringify(data);
     const nodeContentDigest = crypto
-      .createHash('md5')
+      .createHash("md5")
       .update(nodeContent)
-      .digest('hex')
+      .digest("hex");
 
     return {
       ...data,
@@ -20,24 +20,24 @@ exports.onCreateNode = async ({ actions, createNodeId }) => {
       internal: {
         type: `MyApi`,
         content: nodeContent,
-        contentDigest: nodeContentDigest,
-      },
-    }
-  }
+        contentDigest: nodeContentDigest
+      }
+    };
+  };
 
   const { data } = await axios.get(
-    'https://jsonplaceholder.typicode.com/posts/1'
-  )
+    "https://jsonplaceholder.typicode.com/posts/1"
+  );
 
-  return createNode(processNode(data))
-}
+  return createNode(processNode(data));
+};
 
 exports.onCreateWebpackConfig = ({
   actions,
   stage,
   rules,
   loaders,
-  plugins,
+  plugins
 }) => {
   actions.setWebpackConfig({
     module: {
@@ -46,22 +46,22 @@ exports.onCreateWebpackConfig = ({
           test: /\.scss$/,
           use: [
             {
-              loader: 'style-loader',
+              loader: "style-loader"
             },
             {
-              loader: 'css-loader',
+              loader: "css-loader",
               options: {
                 sourceMap: true,
                 modules: true,
-                localIdentName: '[name]-[local]___[hash:base64:5]',
-              },
+                localIdentName: "[name]-[local]___[hash:base64:5]"
+              }
             },
             {
-              loader: 'sass-loader',
-            },
-          ],
-        },
-      ],
-    },
-  })
-}
+              loader: "sass-loader"
+            }
+          ]
+        }
+      ]
+    }
+  });
+};
